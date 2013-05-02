@@ -1,21 +1,25 @@
-class Person
-	attr_reader :holds_bike	
+require_relative 'bikemodule'
 
-	def initialize(holds_bike=[])
-		@holds_bike = holds_bike
+class Person
+	include BikeModule
+
+	def initialize(bike=[])
+		@bikes = bike
 	end
 
-	def holds_bike?
-		!(@holds_bike == [])
+	def add(bike)
+		@bikes.concat bike
 	end
 
 	def rent(station)
-		@holds_bike << station.lease
+		if @bikes == [] then add(station.lease)
+		else puts "a person can only rent one bike at a time!"
+		end
 	end
 
 	def return(station)
-		bike = @holds_bike
-		@holds_bike = []
-		station.end_lease(bike)
-	end	
+		station.end_lease(@bikes)
+		@bikes = []
+	end
+
 end

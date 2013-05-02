@@ -1,29 +1,23 @@
+require_relative 'bikemodule'
+
 class Station
-	attr_reader :bikes
+	include BikeModule
 
-	def initialize(bikes = [])
-		@bikes = bikes
-	end
+	alias :end_lease :add
 
-	def stock
-		@bikes
-	end
-
-	def avail_stock
-		@bikes.select { |bike| !bike.is_broken? }
-	end
-
-	def unavail_stock
-		@bikes.select { |bike| bike.is_broken? }
+	def initialize(stock=[])
+		@bikes = stock
 	end
 
 	def lease
-		leased_bike = @bikes.pop
-		leased_bike
+		lease = [fixed_bikes.pop]
+		@bikes.delete(fixed_bikes.pop)
+		lease
 	end
 
-	def end_lease(bike)
-		@bikes << bike
+	def return_broken_bikes
+		bikes = broken_bikes
+		@bikes.delete_if {|bike| bike.is_broken?}
 	end
 
 

@@ -1,27 +1,36 @@
-require 'person'
+require_relative '../lib/person'
 
-describe 'what a Person can do:' do
-	let(:person) {Person.new}
+describe 'what a person does:' do 
+	it 'a person can hold a bike' do 
+		person = Person.new([:bike])
 
-	it 'a Person when initialized does not hold a bike' do
-		person.holds_bike?.should eq false
-	end	
-
-	it 'a Person can rent a bike from a Station' do
-		station = double :station
-		station.should_receive(:lease).and_return(:bike)
-
-		person.rent(station)
-		person.holds_bike?.should eq true
+		person.stock.should eq [:bike]
 	end
 
-	it 'a Person can return a bike to a Station' do
+	it 'a person can rent a bike from a station' do 
+		person = Person.new
+		station = double :station, lease: [:bike]
+		person.rent(station)
+
+		person.stock.should eq [:bike]
+	end
+
+	it 'a person can return a bike to a station' do 
+		person = Person.new([:bike])
 		station = double :station
 		station.should_receive(:end_lease)
-
 		person.return(station)
-		person.holds_bike?.should eq false
+
+		person.stock.should eq []
 	end
 
+	it 'a person can only rent one bike at a time' do
+		person = Person.new([:bike])
+		station = double :station, lease: [:bike]
+		person.rent(station)
+
+		person.stock.should eq [:bike]
+
+	end
 
 end

@@ -1,22 +1,25 @@
-require 'bike'
+require_relative '../lib/bike'
 
-describe 'bike object' do
-     it 'will return false if asked is_broken? and not broken' do
-     	marin = Bike.new(false)
-     	marin.is_broken?.should be_false
-     end
+describe 'What a bike does:' do 
 
-     it 'is_broken? will return true if broken' do
-     	marin = Bike.new(true)
-     	marin.is_broken?.should be_true
-     end
+	it 'a bike has a status' do 
+		bike = Bike.new(true)
 
-     it 'a broken bike can be fixed' do
-	     marin = Bike.new(true)
-	     marin.fix
+		bike.is_broken?.should be_true
+	end
 
-	     marin.is_broken?.should be_false
-     end
+	it 'a bike can be broken' do 
+		bike = Bike.new(false)
+		bike.break
 
+		bike.is_broken?.should be_true
+	end
 
+	it 'a bike can be fixed' do 
+		bike = Bike.new(true)
+		bike.fix
+
+		bike.is_broken?.should be_false
+	end
 end
+

@@ -1,42 +1,31 @@
-require 'station'
+require_relative '../lib/station.rb'
 
-	describe 'bikes at a docking station:' do
-		it 'a docking station can be initialized to hold bikes' do
-			station = Station.new(:bikes)
+describe 'what a station does:' do 
+	it 'can hold a bike' do 
+		station = Station.new([:bike])
 
-			station.stock.should eq :bikes
-		end
-
-		it 'a Station can lease a bike to a person' do
-			station = Station.new([:bike1,:bike2])
-			
-			station.lease
-			station.stock.should eq [:bike1]
-		end	
-
-		it 'a Station can receive a bike back from a person' do
-			station = Station.new([:bike1])
-			
-			station.end_lease(:bike2)
-			station.stock.should eq [:bike1,:bike2]
-		end
-
-		it 'a Station had a number of availble bikes' do
-			bike1 = double :Bike, is_broken?: false
-			bike2 = double :Bike, is_broken?: true
-
-			station = Station.new( [ bike1 , bike2 ] )
-
-			station.avail_stock.should eq [ bike1 ]
-		end
-
-		it 'a Station had a number of unavailble broken bikes' do
-			bike1 = double :Bike, is_broken?: false
-			bike2 = double :Bike, is_broken?: true
-
-			station = Station.new( [ bike1 , bike2 ] )
-
-			station.unavail_stock.should eq [ bike2 ]
-		end	
-
+		station.stock.should eq [:bike]
 	end
+
+	it 'can lease a bike to a person' do 
+		bike = double :bike, is_broken?: false
+
+		station = Station.new([bike])
+		station.lease.should eq [bike]
+	end
+
+	it 'after leasing a bike the bike is removed from bikes at the station' do 
+		bike = double :bike, is_broken?: false
+
+		station = Station.new([bike])
+		station.lease
+		station.stock.should eq []
+	end
+
+	it 'can receive a bike back from a person' do 
+		bike = double :bike, is_broken?: false
+		station = Station.new
+		station.end_lease([bike])
+		station.stock.should eq [bike]
+	end
+end
